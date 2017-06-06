@@ -119,7 +119,7 @@ function createStarArray(state) {
     var asProbArray = state.stars[i].name.split(' ');
     var asTarget;
     for (var x = 0; x < asProbArray.length; x++) {
-      if (asProbArray[x] === "as") {
+      if (asProbArray[x] === "as" || asProbArray[x] === "and") {
         asTarget = x;
         state.stars[i].name = asProbArray.splice(0, asTarget).join(' ');
       }
@@ -211,10 +211,12 @@ function renderApp(state, elements) {
 
 
 function renderStartPage(state, element) {
+  $('.query').focus();
 }
 
 
 function renderErrorPage(state, element) {
+  $('.query').focus();
   $('.search-again').find('.query').val('');
 }
 
