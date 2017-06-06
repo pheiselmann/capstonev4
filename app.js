@@ -3,6 +3,8 @@ var TASTEDIVE_BASE_URL = 'https://tastedive.com/api/similar?';
 var state = {
 
   route: 'start',
+  //something new
+  query: '',
   results: [],
   resultsMinusGPickIndices: [],
   resultsMinusGDPickIndices: [],
@@ -298,7 +300,8 @@ function renderStarText(state, element) {
 
 function renderFinalPage(state, element) {
 
-  var text = "Here are some movies you might enjoy, based upon the movie title you entered - as well as the genre," +
+  var text = "Here are some movies you might enjoy, based upon the movie title you entered (" + state.query +
+  ") - as well as the genre," +
   " director, and star you chose.  Click on the items below to watch the trailers.  If you don't like these selections," +
   " search again with the same title (or another one). The choices will be different each time!";
 
@@ -391,6 +394,8 @@ $("form[name='search-again']").submit(function(event) {
   event.preventDefault();
   var query = $(this).find('.query').val();
   query = queryCase(query);
+  //something new
+  state.query = query;
   getDataFromApi(query, startProcess);
 });
 
@@ -400,6 +405,8 @@ function watchSubmit(state) {
     e.preventDefault();
     var query = $(this).find('.query').val();
     query = queryCase(query);
+    //something new
+    state.query = query;
     getDataFromApi(query, startProcess);
   });
 }
