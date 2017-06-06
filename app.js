@@ -3,8 +3,6 @@ var TASTEDIVE_BASE_URL = 'https://tastedive.com/api/similar?';
 var state = {
 
   route: 'start',
-  //something new
-  query: '',
   results: [],
   resultsMinusGPickIndices: [],
   resultsMinusGDPickIndices: [],
@@ -27,8 +25,10 @@ function getDataFromApi(searchTerm, callback) {
     url: TASTEDIVE_BASE_URL,
     data: {
       q: 'movie:' + searchTerm,
+      // q: searchTerm,
       type: 'movies',
       k: '269724-PhilHeis-FQRV1O9N',
+      // info: 1,
       verbose: 1,
       limit: 100
     },
@@ -44,7 +44,6 @@ function getDataFromApi(searchTerm, callback) {
 function setRoute(state, route) {
   state.route = route;
 }
-
 
 function startProcess(data) {
   createStateArrays(state, data);
@@ -83,6 +82,33 @@ function createStateArrays(state, data) {
 }
 
 
+// function createStateArrays(state, data) {
+//   //alert(JSON.stringify(data.Similar.Info.Type));
+//   if (data.Similar.Info[0].Name.match(/^movie:/)) {
+//     setRoute(state, 'error');
+//     renderApp(state, PAGE_ELEMENTS);
+//   }
+//   else if (data.Similar.Results[0]) {
+//     state.results = data.Similar.Results;
+//     state.resultsMinusGPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
+//     state.resultsMinusGDPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
+//     createGenreArray(state);
+//     createDirectorArray(state);
+//     createStarArray(state);
+//     createRandomPicks(state, 3, "genres", "genrePicks");
+//     createRandomPicks(state, 3, "directors", "directorPicks");
+//     createRandomPicks(state, 3, "stars", "starPicks");
+//     setRoute(state, 'genre');
+//     renderApp(state, PAGE_ELEMENTS);
+//   }
+//   // else {
+//   //   setRoute(state, 'error');
+//   //   renderApp(state, PAGE_ELEMENTS);
+//   // }
+// }
+
+
+
 function createGenreArray(state) {
   var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
   var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film | film noir)/), index: i } });
@@ -95,6 +121,7 @@ function createDirectorArray(state) {
   var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
   var directors = descriptions.map(function(description, i) { 
     return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+    // return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/), index: i } });
   state.directorShorts = directors.filter(function(director) { if (director.name) { return director; }});
   state.directors = state.directorShorts.map(function(director) { return { name: director.name[1].trim(), index: director.index} });
   for (var i = 0; i < state.directors.length; i++) {
@@ -113,6 +140,7 @@ function createDirectorArray(state) {
 function createStarArray(state) {
   var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
   var stars = descriptions.map(function(description, i) { 
+    // return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z]{1,30}[- ]{0,1}|[a-z]{1,2}[ -\']{1}[A-Z]{1}[a-z]{1,30}){1,3})/), index: i } });
     return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
   state.starShorts = stars.filter(function(star) { if (star.name && star.name[1][0].match(/[A-Z]/)) { return star; }});
   state.stars = state.starShorts.map(function(star) { return { name: star.name[1].trim(), index: star.index } });
@@ -121,7 +149,7 @@ function createStarArray(state) {
     var asProbArray = state.stars[i].name.split(' ');
     var asTarget;
     for (var x = 0; x < asProbArray.length; x++) {
-      if (asProbArray[x] === "as" || asProbArray[x] === "and") {
+      if (asProbArray[x] === "as") {
         asTarget = x;
         state.stars[i].name = asProbArray.splice(0, asTarget).join(' ');
       }
@@ -173,13 +201,14 @@ function randomPickOk(randomPick, words, pickType) {
   if (pickType === "genrePicks") {
     return (words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "directorPicks") {
-    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGPickIndices[randomPick.index]);
+    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGPickIndices[randomPick.index]);
   } else if (pickType === "starPicks") {
-    return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGDPickIndices[randomPick.index]);
+    // alert(JSON.stringify(state.resultsMinusGDPickIndices[randomPick.index]));
+    return (words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGDPickIndices[randomPick.index]);
   }
 }
 
-
+//DUPLICATE THIS FOR RESULTSMINUSDINDICES AND RESULTSMINUSDGINDICES == "notInResultsMinusIndices"
 function notInPicksArray(randomPick, pickType) {
   var result = true;
   for(var i = 0; i < state[pickType].length; i++) {
@@ -213,12 +242,10 @@ function renderApp(state, elements) {
 
 
 function renderStartPage(state, element) {
-  $('.query').focus();
 }
 
 
 function renderErrorPage(state, element) {
-  $('.query').focus();
   $('.search-again').find('.query').val('');
 }
 
@@ -300,8 +327,7 @@ function renderStarText(state, element) {
 
 function renderFinalPage(state, element) {
 
-  var text = "Here are some movies you might enjoy, based upon the movie title you entered (\"" + state.query +
-  "\") - as well as the genre," +
+  var text = "Here are some movies you might enjoy, based upon the movie title you entered - as well as the genre," +
   " director, and star you chose.  Click on the items below to watch the trailers.  If you don't like these selections," +
   " search again with the same title (or another one). The choices will be different each time!";
 
@@ -390,14 +416,28 @@ $("form[name='star-choices']").submit(function(event) {
 });
 
 
+// $("form[name='search-again']").submit(function(event) {
+//   event.preventDefault();
+//   var query = $(this).find('.query').val();
+//   getDataFromApi(query, startProcess);
+// });
+
+
 $("form[name='search-again']").submit(function(event) {
   event.preventDefault();
   var query = $(this).find('.query').val();
   query = queryCase(query);
-  //something new
-  state.query = query;
   getDataFromApi(query, startProcess);
 });
+
+
+// function watchSubmit(state) {
+//   $('.js-search-form').submit(function(e) {
+//     e.preventDefault();
+//     var query = $(this).find('.query').val();
+//     getDataFromApi(query, startProcess);
+//   });
+// }
 
 
 function watchSubmit(state) {
@@ -405,8 +445,6 @@ function watchSubmit(state) {
     e.preventDefault();
     var query = $(this).find('.query').val();
     query = queryCase(query);
-    //something new
-    state.query = query;
     getDataFromApi(query, startProcess);
   });
 }
@@ -416,6 +454,7 @@ function queryCase(query) {
   for (var i = 0; i < query.length; i++) {
     query[i] = query[i].charAt(0).toUpperCase() + query[i].slice(1); 
   }
+// alert(query.join(' '));
   return query.join(' ');
 }
 
