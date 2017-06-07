@@ -63,8 +63,8 @@ main {
 
 .ticket {
   position: absolute;
-  left: 610px;
-  top: 85px;
+  left: 620px;
+  top: 135px;
 }
 
 .genre-image {
@@ -87,6 +87,10 @@ main {
 
 p {
 	max-width: 1000px;
+}
+
+.explanation {
+  max-width: 500px;
 }
 
 p, span {

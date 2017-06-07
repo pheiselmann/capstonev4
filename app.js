@@ -242,7 +242,7 @@ function renderGenreChoices(state, element) {
 
 
 function renderGenreText(state, element) {
-  var text = 'Choose one of the genres below!';
+  var text = 'Ok, now click on one of the genres below:';
   element.text(text);
 }
 
@@ -267,7 +267,7 @@ function renderDirectorChoices(state, element) {
 
 
 function renderDirectorText(state, element) {
-  var text = 'Choose one of the directors below.';
+  var text = 'Now pick a director (even if the name is unfamiliar):';
   element.text(text);
 }
 
@@ -292,7 +292,7 @@ function renderStarChoices(state, element) {
 
 
 function renderStarText(state, element) {
-  var text = 'Choose one of the stars below.';
+  var text = 'You\'re almost done!  Choose one of the stars below:';
   element.text(text);
 }
 
