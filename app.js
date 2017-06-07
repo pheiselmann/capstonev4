@@ -3,7 +3,6 @@ var TASTEDIVE_BASE_URL = 'https://tastedive.com/api/similar?';
 var state = {
 
   route: 'start',
-  //something new
   query: '',
   results: [],
   resultsMinusGPickIndices: [],
@@ -63,7 +62,7 @@ function resetGame(state) {
 
 
 function createStateArrays(state, data) {
-  if (data.Similar.Results[0]) {
+  if (data.Similar.Results[0] && data.Similar.Results.length > 2) {
     state.results = data.Similar.Results;
     state.resultsMinusGPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
     state.resultsMinusGDPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
@@ -394,7 +393,6 @@ $("form[name='search-again']").submit(function(event) {
   event.preventDefault();
   var query = $(this).find('.query').val();
   query = queryCase(query);
-  //something new
   state.query = query;
   getDataFromApi(query, startProcess);
 });
@@ -405,11 +403,11 @@ function watchSubmit(state) {
     e.preventDefault();
     var query = $(this).find('.query').val();
     query = queryCase(query);
-    //something new
     state.query = query;
     getDataFromApi(query, startProcess);
   });
 }
+
 
 function queryCase(query) {
   var query = query.toLowerCase().split(" ");
