@@ -2,18 +2,17 @@
 
 ## Table of Contents
 
-  - [Demo](#demo)
+  - [Introduction](#introduction)
   - [How It Works](#how-it-works)
+  - [Demo](#demo)
   - [Technology](#technology)
 
-  ## Demo
+ ## Introduction
 
-  ![Walkthrough](images/full_metal_jacket.gif)
+ ## How It Works
 
-  ## Introduction
+ ## Demo
 
+ ![Walkthrough](images/full_metal_jacket.gif)
 
-  ## How It Works
-
-
-  ## Technology
+ ## Technology
