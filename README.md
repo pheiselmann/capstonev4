@@ -1,4 +1,4 @@
-#Educational Movie Search
+# Educational Movie Search
 
 ## Table of Contents
 
@@ -10,7 +10,7 @@
 
   ![Walkthrough](images/full_metal_jacket.gif)
 
-  ### Introduction
+  ## Introduction
 
 
   ## How It Works
