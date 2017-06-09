@@ -29,7 +29,7 @@ function getDataFromApi(searchTerm, callback) {
       type: 'movies',
       k: '269724-PhilHeis-FQRV1O9N',
       verbose: 1,
-      limit: 100
+      limit: 1000
     },
     dataType: 'jsonp',
     type: 'GET',
@@ -62,13 +62,13 @@ function resetGame(state) {
 
 
 function createStateArrays(state, data) {
-  if (data.Similar.Results[0] && data.Similar.Results.length > 2) {
+  if (data.Similar.Results[0] && data.Similar.Results.length > 20) {
     state.results = data.Similar.Results;
     state.resultsMinusGPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
     state.resultsMinusGDPickIndices = data.Similar.Results.map(function(result, i) { return { index: i } });
-    createGenreArray(state);
-    createDirectorArray(state);
-    createStarArray(state);
+    createTypeArrays(state, "genres");
+    createTypeArrays(state, "directors");
+    createTypeArrays(state, "stars");
     createRandomPicks(state, 3, "genres", "genrePicks");
     createRandomPicks(state, 3, "directors", "directorPicks");
     createRandomPicks(state, 3, "stars", "starPicks");
@@ -82,47 +82,41 @@ function createStateArrays(state, data) {
 }
 
 
-function createGenreArray(state) {
+function createTypeArrays(state, type) {
   var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
-  var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film | film noir)/), index: i } });
-  state.genreShorts = genres.filter(function(genre) { if (genre.name && genre.name[1].trim().split(' ').length > 2) { return genre; }});
-  state.genres = state.genreShorts.map(function(genre) { return { name: genre.name[1].trim(), index: genre.index} });
-}
-
-
-function createDirectorArray(state) {
-  var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
-  var directors = descriptions.map(function(description, i) { 
-    return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
-  state.directorShorts = directors.filter(function(director) { if (director.name) { return director; }});
-  state.directors = state.directorShorts.map(function(director) { return { name: director.name[1].trim(), index: director.index} });
-  for (var i = 0; i < state.directors.length; i++) {
-    var withProbArray = state.directors[i].name.split(' ');
-    var withTarget;
-    for (var x = 0; x < withProbArray.length; x++) {
-      if (withProbArray[x] === "with") {
-        withTarget = x;
-        state.directors[i].name = withProbArray.splice(0, withTarget).join(' ');
+  if (type === "genres") {
+    var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film | film noir)/), index: i } });
+    state.genreShorts = genres.filter(function(genre) { if (genre.name && genre.name[1].trim().split(' ').length > 2) { return genre; }});
+    state.genres = state.genreShorts.map(function(genre) { return { name: genre.name[1].trim(), index: genre.index} });
+  } else if (type === "directors") {
+    var directors = descriptions.map(function(description, i) { 
+      return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+    state.directorShorts = directors.filter(function(director) { if (director.name) { return director; }});
+    state.directors = state.directorShorts.map(function(director) { return { name: director.name[1].trim(), index: director.index} });
+    for (var i = 0; i < state.directors.length; i++) {
+      var withProbArray = state.directors[i].name.split(' ');
+      var withTarget;
+      for (var x = 0; x < withProbArray.length; x++) {
+        if (withProbArray[x] === "with") {
+           withTarget = x;
+          state.directors[i].name = withProbArray.splice(0, withTarget).join(' ');
+        }
       }
     }
-  }
-}
+  } else if (type === "stars") {
+    var stars = descriptions.map(function(description, i) { 
+      return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+    state.starShorts = stars.filter(function(star) { if (star.name && star.name[1][0].match(/[A-Z]/)) { return star; }});
+    state.stars = state.starShorts.map(function(star) { return { name: star.name[1].trim(), index: star.index } });
 
-
-function createStarArray(state) {
-  var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
-  var stars = descriptions.map(function(description, i) { 
-    return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
-  state.starShorts = stars.filter(function(star) { if (star.name && star.name[1][0].match(/[A-Z]/)) { return star; }});
-  state.stars = state.starShorts.map(function(star) { return { name: star.name[1].trim(), index: star.index } });
-
-  for (var i = 0; i < state.stars.length; i++) {
-    var asProbArray = state.stars[i].name.split(' ');
-    var asTarget;
-    for (var x = 0; x < asProbArray.length; x++) {
-      if (asProbArray[x] === "as" || asProbArray[x] === "and") {
-        asTarget = x;
-        state.stars[i].name = asProbArray.splice(0, asTarget).join(' ');
+    for (var i = 0; i < state.stars.length; i++) {
+      var asProbArray = state.stars[i].name.split(' ');
+      var asTarget;
+      for (var x = 0; x < asProbArray.length; x++) {
+        if (asProbArray[x] === "as" || asProbArray[x] === "and") {
+          sTarget = x;
+          state.stars[i].name = asProbArray.splice(0, asTarget).join(' ');
+        }
       }
     }
   }
