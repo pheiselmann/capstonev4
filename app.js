@@ -5,8 +5,6 @@ var state = {
   route: 'start',
   query: '',
   results: [],
-  resultsMinusGPickIndices: [],
-  resultsMinusGDPickIndices: [],
   genres: [],
   genreShorts: [],
   genrePicks: [],
@@ -146,13 +144,10 @@ function updatePicks(randomPick, words, pickType) {
   if (pickType === "genrePicks") {
     if (randomPickOk(randomPick, words, pickType)){
       state.genrePicks.push(randomPick);
-      delete state.resultsMinusGPickIndices[randomPick.index];
-      delete state.resultsMinusGDPickIndices[randomPick.index];
     }
   } else if (pickType === "directorPicks") {
      if (randomPickOk(randomPick, words, pickType)){
       state.directorPicks.push(randomPick);
-      delete state.resultsMinusGDPickIndices[randomPick.index];
     }
   } else if (pickType === "starPicks") {
      if (randomPickOk(randomPick, words, pickType)){
@@ -166,9 +161,9 @@ function randomPickOk(randomPick, words, pickType) {
   if (pickType === "genrePicks") {
     return (words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "directorPicks") {
-    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGPickIndices[randomPick.index]);
+    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "starPicks") {
-    return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGDPickIndices[randomPick.index]);
+    return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
   }
 }
 
