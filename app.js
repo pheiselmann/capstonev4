@@ -83,12 +83,24 @@ function createStateArrays(state, data) {
 function createTypeArrays(state, type) {
   var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
   if (type === "genres") {
-    var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film | film noir)/), index: i } });
+    //include film noir
+    var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film noir |.+?film)/), index: i } });
     state.genreShorts = genres.filter(function(genre) { if (genre.name && genre.name[1].trim().split(' ').length > 2) { return genre; }});
     state.genres = state.genreShorts.map(function(genre) { return { name: genre.name[1].trim(), index: genre.index} });
   } else if (type === "directors") {
     var directors = descriptions.map(function(description, i) { 
-      return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+      //original
+      // return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+   //include "Chow Yun-fat" 
+//[A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|
+//increase regex matches for directors
+      return { name: description.match(/(?:filmmaker | directed by and starred | directed and written by | directed and co-written by | directed and produced by | directed and co-produced by | directed by | Directed by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1,}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+
+     //includes "Chow Yun-fat" and "J. Lee Thompson"
+     // return { name: description.match(/(?:directed by | directed by and starred | Directed by | directed and written by | directed and produced by | directed and co-produced by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[ ]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{0,1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}[a-z\x7f-\xff]{1,30}[- ][A-Z]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+    // [A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{0,1}[a-z\x7f-\xff]{1,30}|
+    // [A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}[a-z\x7f-\xff]{1,30}|
+//[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}[a-z\x7f-\xff]{1,30}[- ][A-Z]{1}[a-z\x7f-\xff]{1,30}|
     state.directorShorts = directors.filter(function(director) { if (director.name) { return director; }});
     state.directors = state.directorShorts.map(function(director) { return { name: director.name[1].trim(), index: director.index} });
     for (var i = 0; i < state.directors.length; i++) {
@@ -96,6 +108,7 @@ function createTypeArrays(state, type) {
       var withTarget;
       for (var x = 0; x < withProbArray.length; x++) {
         if (withProbArray[x] === "with") {
+          // if (withProbArray[x] === "with" || withProbArray[x] === "and") {
            withTarget = x;
           state.directors[i].name = withProbArray.splice(0, withTarget).join(' ');
         }
@@ -103,7 +116,20 @@ function createTypeArrays(state, type) {
     }
   } else if (type === "stars") {
     var stars = descriptions.map(function(description, i) { 
-      return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+      //original
+   // return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+  //include "Chow Yun-fat"
+         // [A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|
+  //increase regex matches for stars
+   return { name: description.match(/(?:starring the voices of | starring | starred | stars Academy Award nominee | stars the voices of | South Korean pop musician | stars | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+
+           //includes "Chow Yun-fat" and "J. Lee Thompson"
+      // return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[ ]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+
+      // return { name: description.match(/(?:starring | starred | stars | starring the voices of | stars the voices of | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{0,1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}[a-z\x7f-\xff]{1,30}[- ][A-Z]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+ // [A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{0,1}[a-z\x7f-\xff]{1,30}|
+    // [A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}[a-z\x7f-\xff]{1,30}|
+    //[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}[a-z\x7f-\xff]{1,30}[- ][A-Z]{1}[a-z\x7f-\xff]{1,30}|
     state.starShorts = stars.filter(function(star) { if (star.name && star.name[1][0].match(/[A-Z]/)) { return star; }});
     state.stars = state.starShorts.map(function(star) { return { name: star.name[1].trim(), index: star.index } });
 
@@ -111,7 +137,8 @@ function createTypeArrays(state, type) {
       var asProbArray = state.stars[i].name.split(' ');
       var asTarget;
       for (var x = 0; x < asProbArray.length; x++) {
-        if (asProbArray[x] === "as" || asProbArray[x] === "and") {
+        if (asProbArray[x] === "as" || asProbArray[x] === "and" ) {
+          // if (asProbArray[x] === "as" || asProbArray[x] === "and" || asProbArray[x] === "in") {
           sTarget = x;
           state.stars[i].name = asProbArray.splice(0, asTarget).join(' ');
         }
@@ -161,9 +188,24 @@ function randomPickOk(randomPick, words, pickType) {
   if (pickType === "genrePicks") {
     return (words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "directorPicks") {
-    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+    //original
+    // return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+    //eliminate "Chow Yun-"     
+    // return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-]$/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+
+         //allow "Chow Yun-fat"
+
+      return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+
   } else if (pickType === "starPicks") {
-    return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+    //original
+    // return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+    //eliminate "Chow Yun-"
+    // return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-]$/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+
+    //allow "Chow Yun-fat"
+    return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+
   }
 }
 
