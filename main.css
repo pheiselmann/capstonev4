@@ -127,19 +127,19 @@ button {
   margin-top: 20px;
   margin-bottom: 40px;
   border: 0;
-  background: white;
+  background: lightgrey;
   border-radius: 4px;
-  box-shadow: 0 5px 0 lighter-grey;
+  box-shadow: 0 5px 0 darkgrey;
   color: black;
   cursor: pointer;
   font: inherit;
-/*  margin: 0;
-*/  outline: 0;
-  padding: 8px 12px;
+  /*margin: 0;*/
+  outline: 1;
+  padding: 7px 10px;
   transition: all .1s linear;
 }
 button:active {
-  box-shadow: 0 2px 0 grey;
+  box-shadow: 0 2px 0 darkgrey;
   transform: translateY(3px);
 }
 
