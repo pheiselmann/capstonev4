@@ -1,4 +1,4 @@
-# Educational Movie Search
+# Movie Suggestion App
 
 ## Table of Contents
 
