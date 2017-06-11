@@ -35,24 +35,29 @@ main {
 }
 
 .star {
-  left: 90px;
-}
+  left: 80px;
+/*  left: 90px;
+*/}
 
 .star2 {
-  left: 140px;
-}
+  left: 130px;
+/*  left: 140px;
+*/}
 
 .star3 {
-  left: 190px;
-}
+  left: 180px;
+/*  left: 190px;
+*/}
 
 .star4 {
-  left: 240px;
-}
+  left: 230px;
+/*  left: 240px;
+*/}
 
 .star5 {
-  left: 290px;
-}
+  left: 280px;
+/*  left: 290px;
+*/}
 
 .projector {
   position: absolute;
