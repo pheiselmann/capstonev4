@@ -88,7 +88,7 @@ function createTypeArrays(state, type) {
     state.genres = state.genreShorts.map(function(genre) { return { name: genre.name[1].trim(), index: genre.index} });
   } else if (type === "directors") {
     var directors = descriptions.map(function(description, i) { 
-      return { name: description.match(/(?:filmmaker | directed by and starred | directed and written by | directed and co-written by | directed and produced by | directed and co-produced by | directed by | Directed by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1,}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+      return { name: description.match(/(?:filmmaker | directorial debut of | directed by and starred | directed and written by | directed and co-written by | directed and produced by | directed and co-produced by | directed by | Directed by | film by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1,}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
     state.directorShorts = directors.filter(function(director) { if (director.name) { return director; }});
     state.directors = state.directorShorts.map(function(director) { return { name: director.name[1].trim(), index: director.index} });
     for (var i = 0; i < state.directors.length; i++) {
