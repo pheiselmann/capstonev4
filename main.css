@@ -127,7 +127,7 @@ button {
   cursor: pointer;
   font: inherit;
   outline: 1;
-  padding: 4px 8px;
+  padding: 3px 7px;
   transition: all .1s linear;
 }
 button:active {
