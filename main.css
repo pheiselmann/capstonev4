@@ -111,16 +111,9 @@ h1 {
   font-weight: bolder;
 }
 
-/*button {
-	font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 40px;
-}*/
-
 input {
   font-size: 16px;
-/*  padding: 6px 10px;
-*/}
+}
 
 button {
   font-weight: bold;
@@ -133,7 +126,6 @@ button {
   color: black;
   cursor: pointer;
   font: inherit;
-  /*margin: 0;*/
   outline: 1;
   padding: 4px 8px;
   transition: all .1s linear;
