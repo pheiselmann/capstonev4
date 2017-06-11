@@ -111,11 +111,38 @@ h1 {
   font-weight: bolder;
 }
 
-button {
+/*button {
 	font-weight: bold;
   margin-top: 20px;
   margin-bottom: 40px;
+}*/
+
+input {
+  font-size: 18px;
+/*  padding: 6px 10px;
+*/}
+
+button {
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 5px 0 lighter-grey;
+  color: black;
+  cursor: pointer;
+  font: inherit;
+/*  margin: 0;
+*/  outline: 0;
+  padding: 8px 12px;
+  transition: all .1s linear;
 }
+button:active {
+  box-shadow: 0 2px 0 grey;
+  transform: translateY(3px);
+}
+
 
 ul {
   list-style-type: none;
