@@ -35,29 +35,25 @@ main {
 }
 
 .star {
-  left: 80px;
-/*  left: 90px;
-*/}
+  left: 90px;
+
+}
 
 .star2 {
-  left: 130px;
-/*  left: 140px;
-*/}
+  left: 140px;
+}
 
 .star3 {
-  left: 180px;
-/*  left: 190px;
-*/}
+  left: 190px;
+}
 
 .star4 {
-  left: 230px;
-/*  left: 240px;
-*/}
+  left: 240px;
+}
 
 .star5 {
-  left: 280px;
-/*  left: 290px;
-*/}
+  left: 290px;
+}
 
 .projector {
   position: absolute;
@@ -116,7 +112,6 @@ h1 {
 }
 
 button {
-	/*margin-top: 30px;*/
 	font-weight: bold;
   margin-top: 20px;
   margin-bottom: 40px;
@@ -152,7 +147,6 @@ li {
 }
 
 .link {
-	/*padding: 20px;*/
 	text-align: center;
 	margin-bottom: 20px;
 	text-decoration: none;
