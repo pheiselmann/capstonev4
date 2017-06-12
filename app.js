@@ -83,7 +83,7 @@ function createStateArrays(state, data) {
 function createTypeArrays(state, type) {
   var descriptions = state.results.map(function(movie) { return movie.wTeaser; });
   if (type === "genres") {
-    var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?film noir |.+?film)/), index: i } });
+    var genres = descriptions.map(function(description, i) { return { name: description.match(/(?:is a )(.+?thriller | .+?film noir | .+?film)/), index: i } });
     state.genreShorts = genres.filter(function(genre) { if (genre.name && genre.name[1].trim().split(' ').length > 2) { return genre; }});
     state.genres = state.genreShorts.map(function(genre) { return { name: genre.name[1].trim(), index: genre.index} });
   } else if (type === "directors") {
