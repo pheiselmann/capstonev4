@@ -161,7 +161,7 @@ function randomPickOk(randomPick, words, pickType) {
   if (pickType === "genrePicks") {
     return (words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "directorPicks") {
-    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
+    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/(starring)/) || randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "starPicks") {
     return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType));
   }
