@@ -103,7 +103,7 @@ function createTypeArrays(state, type) {
     }
   } else if (type === "stars") {
     var stars = descriptions.map(function(description, i) { 
-    return { name: description.match(/(?:starring the voices of | starring | starred | stars Academy Award nominee | stars the voices of | South Korean pop musician | stars | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
+    return { name: description.match(/(?:starring the voices of | starring South Park creators | starring | starred | stars Academy Award nominee | stars the voices of | South Korean pop musician | stars | played by )(.+?\b([A-Z]{1}[a-z\x7f-\xff]{1,30}[-]{1}[a-z\x7f-\xff]{1,30}|[A-Z]{1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[A-Z]{1}[- \']{1}[A-Z]{0,1}[a-z\x7f-\xff]{1,30}[- ]{0,1}|[a-z\x7f-\xff]{1,2}[ -\']{1}[A-Z]{1}[a-z\x7f-\xff]{1,30}){1,3})/), index: i } });
     state.starShorts = stars.filter(function(star) { if (star.name && star.name[1][0].match(/[A-Z]/)) { return star; }});
     state.stars = state.starShorts.map(function(star) { return { name: star.name[1].trim(), index: star.index } });
 
