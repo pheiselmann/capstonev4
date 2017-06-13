@@ -18,8 +18,7 @@ var state = {
   starPicks: [],
   movieKeys: [],
   movieIdeas: [],
-  //youTubeIDOk code
-  randomPickYouTubeIDOk: 'true'
+  randomPickYouTubeIDOk: ""
 }
 
 
@@ -151,9 +150,6 @@ function randomIntFromInterval(min,max)
 
 
 function updatePicks(randomPick, words, pickType) {
-  //youTubeIDOk code
-    youTubeIDOk(randomPick, dataItemsExist);
-
   if (pickType === "genrePicks") {
     if (randomPickOk(randomPick, words, pickType)){
       state.genrePicks.push(randomPick);
@@ -173,26 +169,22 @@ function updatePicks(randomPick, words, pickType) {
 }
 
 
-//youTubeIDOk code
-// var randomPickYouTubeIDOk;
-
-
 function randomPickOk(randomPick, words, pickType) {
-  state.randomPickYouTubeIDOk = "false";
   youTubeIDOk(randomPick, dataItemsExist);
-  alert(state.randomPickYouTubeIDOk);
+  
   if (pickType === "genrePicks") {
-    return (words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
-    // return (state.randomPickYouTubeIDOk === "true" && words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
+    alert(state.randomPickYouTubeIDOk);
+    return (state.randomPickYouTubeIDOk === "true" && words.length < 11 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/)) && notInPicksArray(randomPick, pickType));
   } else if (pickType === "directorPicks") {
-    return (words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGPickIndices[randomPick.index]);
+    alert(state.randomPickYouTubeIDOk);
+    return (state.randomPickYouTubeIDOk === "true" && words.length > 1 && words.length < 5 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGPickIndices[randomPick.index]);
   } else if (pickType === "starPicks") {
-    return (words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGDPickIndices[randomPick.index]);
+    alert(state.randomPickYouTubeIDOk);
+    return (state.randomPickYouTubeIDOk === "true" && words.length > 1 && words.length < 4 && !(randomPick.name.match(/^[a-z]/) || randomPick.name.match(/[-][a-z]/) || randomPick.name.match(/[a-z][a-z][.]/) || randomPick.name.match(/[,]/) || randomPick.name.match(/&/) || randomPick.name.match(/\"/)) && notInPicksArray(randomPick, pickType) && state.resultsMinusGDPickIndices[randomPick.index]);
   }
 }
 
 
-//youTubeIDOk code
 function youTubeIDOk(randomPick, callback) {
   var YOUTUBE_BASE_URL = 'https://www.googleapis.com/youtube/v3/videos';
   var settings = {
@@ -204,7 +196,8 @@ function youTubeIDOk(randomPick, callback) {
     },
     dataType: 'json',
     type: 'GET',
-    success: callback
+    success: callback,
+    async: false
   };
   $.ajax(settings);
 }
@@ -213,16 +206,16 @@ function youTubeIDOk(randomPick, callback) {
 function dataItemsExist(data) {
   if (data.items[0]) {
     state.randomPickYouTubeIDOk = "true";
-    // alert(state.randomPickYouTubeIDOk);
+  } else {
+    state.randomPickYouTubeIDOk = "false";
   }
 }
 
 
 function findRandomPickYouTubeID(randomPick) {
-  // alert(JSON.stringify(state.results[randomPick.index].yID));
   return state.results[randomPick.index].yID;
 }
-//end of youTubeIDOk code
+
 
 function notInPicksArray(randomPick, pickType) {
   var result = true;
