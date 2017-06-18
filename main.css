@@ -1,6 +1,7 @@
 * {
-	box-sizing: border-box;
-	font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.4em;
 }
 
 html {
@@ -13,11 +14,13 @@ html {
 
 main {
   position: relative;
-	max-width: 1000px;
-	margin: 0 auto;
-	padding: 0 60px;
-	padding-top: 90px;
-  background: url("images/light_film5.jpg") no-repeat;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 60px;
+  padding-top: 70px;
+/*   background: url("images/light_film5.jpg") no-repeat; */
+  background-color:black;
+  opacity: 0.9;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -27,11 +30,12 @@ main {
 
 .genre-text, .director-text, .star-text {
   padding-top: 30px;
+  color: lavender;
 }
 
 .star, .star2, .star3, .star4, .star5 {
   position: absolute;
-  top: 40px;
+  top: 30px;
 }
 
 .star {
@@ -58,27 +62,27 @@ main {
 .projector {
   position: absolute;
   left: 610px;
-  top: 65px;
+  top:75px;
   border-radius: 25px;
 }
 
 .ticket {
   position: absolute;
   left: 620px;
-  top: 140px;
+  top: 170px;
 }
 
 .genre-image {
   position: absolute;
   left: 810px;
-  top: 40px;
+  top: 50px;
   border-radius: 25px;
 }
 
 .star-image {
   position: absolute;
   left: 660px;
-  top: 65px;
+  top: 75px;
   border-radius: 25px;
 }
 
@@ -87,7 +91,7 @@ main {
 }
 
 p {
-	max-width: 1000px;
+  max-width: 1000px;
 }
 
 .explanation {
@@ -96,15 +100,17 @@ p {
 
 p, span {
   font-size: 18px;
+  color: lavender;
 }
 
 button:hover, .link:hover, .trailer:hover {
-	cursor: pointer;
+  cursor: pointer;
 
 }
 
 h1 {
   margin-top: 20px;
+  color: lavender;
 }
 
 .placeholder {
@@ -113,6 +119,7 @@ h1 {
 
 input {
   font-size: 17px;
+
 }
 
 button {
@@ -120,18 +127,18 @@ button {
   margin-top: 20px;
   margin-bottom: 40px;
   border: 0;
-  background: lightgrey;
+  background: #0099a2;
   border-radius: 4px;
-  box-shadow: 0 5px 0 darkgrey;
+  box-shadow: 0 1px 0 #0099a2;
   color: black;
   cursor: pointer;
   font: inherit;
   outline: 1;
-  padding: 3px 7px;
+  padding: 2px 5px;
   transition: all .1s linear;
 }
 button:active {
-  box-shadow: 0 2px 0 darkgrey;
+  box-shadow: 0 3px 0 #0099a2;
   transform: translateY(3px);
 }
 
@@ -148,7 +155,7 @@ li {
   position: relative;
   left: 0px;
   margin-left: 0px;
-	margin-top: 60px;
+  margin-top: 60px;
 }
 
 .results-text {
@@ -156,42 +163,42 @@ li {
 }
 
 .link:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .trailer {
   border: 1px solid #E5E5E5;
-  background-color: black;
+  background-color: #0099a2;;
   margin-bottom: 10px;
 }
 
 .link {
-	text-align: center;
-	margin-bottom: 20px;
-	text-decoration: none;
+  text-align: center;
+  margin-bottom: 20px;
+  text-decoration: none;
 }
 
 a:link {
-	text-decoration: none;
-	color: black;
+  text-decoration: none;
+  color: lavender;
 }
 
 a:visited {
   text-decoration: none;
-  color: black;
+  color: lavender;
 }
 
 .error-msg {
-	color: lavender;
+  color: crimson;
 }
 
 .movie-image {
-	width: 100%;
+  width: 100%;
   height: 146.54px;
 }
 
 .radio{
-  color:black;
+  color: lavender;
   font-size:18px;
   position:relative;
 }
@@ -231,7 +238,7 @@ a:visited {
 }
 
 .radio input[type="radio"]:checked + label{
-  color:white;  
+  color: #0099a2;
 }
 
 .radio input[type="radio"]:checked + label:before{
@@ -239,13 +246,14 @@ a:visited {
   width:5px;
   height:5px;
   position:absolute;
-  background:#0B8;
+  background:#0099a2;
   left:10px;
   top:6px;
   border-radius:100%;
   -ms-border-radius:100%;
   -moz-border-radius:100%;
   -webkit-border-radius:100%;
+  color: #0099a2;
 }
 
 .row {
