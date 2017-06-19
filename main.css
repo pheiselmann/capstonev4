@@ -121,7 +121,7 @@ input {
   font-size: 17px;
   -moz-border-radius: 15px;
   border-radius: 15px;
-  border:solid 1px #0099a2; 
+  /*border:solid 1px #0099a2; */
   padding:5px;
 }
 
